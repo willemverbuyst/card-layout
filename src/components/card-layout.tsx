@@ -1,9 +1,9 @@
-import useCardStore from "../hooks/useCardStore";
+import useCardStore, { ColumnId } from "../hooks/useCardStore";
 import { MemoizedCardComponent } from "./card-component";
 import "./card-layout.css";
 
 export default function CardLayout() {
-  const { layout } = useCardStore();
+  const layout = useCardStore((state) => state.layout);
 
   return (
     <main className="card-layout-root">
@@ -15,7 +15,7 @@ export default function CardLayout() {
                 key={cardItem.name}
                 cardItem={cardItem}
                 index={index}
-                column={Number(column) as 1 | 2 | 3}
+                column={Number(column) as ColumnId}
               />
             ))}
           </section>

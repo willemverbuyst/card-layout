@@ -3,11 +3,11 @@ import { createStore } from "zustand/vanilla";
 import { defaultCardLayout } from "../config/defaultCardLayout";
 import { CardItem } from "../interfaces/CardItem";
 
-type ColumnId = 1 | 2 | 3;
+export type ColumnId = 1 | 2 | 3;
 
-type Direction = "up" | "down" | "left" | "right";
+export type Direction = "up" | "down" | "left" | "right";
 
-type CardLayout = Record<ColumnId, CardItem[]>;
+export type CardLayout = Record<ColumnId, CardItem[]>;
 
 type CardLayoutData = {
   layout: CardLayout;

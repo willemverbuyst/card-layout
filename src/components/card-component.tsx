@@ -7,7 +7,7 @@ import {
   MoveUpIcon,
 } from "lucide-react";
 import { memo } from "react";
-import useCardStore from "../hooks/useCardStore";
+import useCardStore, { ColumnId, Direction } from "../hooks/useCardStore";
 import { CardItem } from "../interfaces/CardItem";
 import "./card-component.css";
 
@@ -18,16 +18,17 @@ function CardComponent({
 }: {
   index: number;
   cardItem: CardItem;
-  column: 1 | 2 | 3;
+  column: ColumnId;
 }) {
-  const { handleCollapse, handleMove } = useCardStore();
+  const handleCollapse = useCardStore((state) => state.handleCollapse);
+  const handleMove = useCardStore((state) => state.handleMove);
 
   function collapse() {
     handleCollapse(column, index);
   }
 
-  function move(direction: "up" | "down" | "left" | "right") {
-    handleMove({ direction, column, index, cardItem });
+  function move(direction: Direction) {
+    handleMove({ direction, column, index });
   }
 
   return (
