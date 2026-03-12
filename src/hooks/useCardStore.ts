@@ -3,23 +3,29 @@ import { createStore } from "zustand/vanilla";
 import { defaultCardLayout } from "../config/defaultCardLayout";
 import { CardItem } from "../interfaces/CardItem";
 
-interface CardLayoutState {
-  layout: {
-    [key: number]: CardItem[];
-  };
-  handleCollapse: (column: number, index: number) => void;
-  handleMove: (args: {
-    direction: "up" | "down" | "left" | "right";
-    column: 1 | 2 | 3;
-    index: number;
-    cardItem: CardItem;
-  }) => void;
-}
+type ColumnId = 1 | 2 | 3;
 
-const initialState: CardLayoutState = {
+type Direction = "up" | "down" | "left" | "right";
+
+type CardLayout = Record<ColumnId, CardItem[]>;
+
+type CardLayoutData = {
+  layout: CardLayout;
+};
+
+type CardLayoutActions = {
+  handleCollapse: (column: ColumnId, index: number) => void;
+  handleMove: (input: {
+    direction: Direction;
+    column: ColumnId;
+    index: number;
+  }) => void;
+};
+
+export type CardLayoutState = CardLayoutData & CardLayoutActions;
+
+const initialState: CardLayoutData = {
   layout: defaultCardLayout,
-  handleCollapse: () => {},
-  handleMove: () => {},
 };
 
 const cardStore = createStore<CardLayoutState>((set) => ({
