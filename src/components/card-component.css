@@ -1,75 +1,75 @@
- .card {
-   color: #ffffff;
-   border: 0px solid #ffffff;
-   border-radius: 0.5rem;
-   padding: 1rem;
- }
+.card {
+  color: #ffffff;
+  border: 0px solid #ffffff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
 
- .card-header {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   font-size: 1.875rem;
-   line-height: 2.25rem;
- }
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
 
- .card-actions {
-   display: flex;
-   gap: 0.5rem;
- }
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
 
- .card-icon {
-   cursor: pointer;
- }
+.card-icon {
+  cursor: pointer;
+}
 
- .card-body {
-   height: 80px;
- }
+.card-body {
+  height: 80px;
+}
 
- .card-color-red {
-   background-color: #ef4444;
- }
+.card-color-red {
+  background-color: #ef4444;
+}
 
- .card-color-green {
-   background-color: #22c55e;
- }
+.card-color-green {
+  background-color: #22c55e;
+}
 
- .card-color-blue {
-   background-color: #3b82f6;
- }
+.card-color-blue {
+  background-color: #3b82f6;
+}
 
- .card-color-cyan {
-   background-color: #06b6d4;
- }
+.card-color-cyan {
+  background-color: #06b6d4;
+}
 
- .card-color-pink {
-   background-color: #ec4899;
- }
+.card-color-pink {
+  background-color: #ec4899;
+}
 
- .card-color-teal {
-   background-color: #14b8a6;
- }
+.card-color-teal {
+  background-color: #14b8a6;
+}
 
- .card-color-yellow {
-   background-color: #eab308;
- }
+.card-color-yellow {
+  background-color: #eab308;
+}
 
- .card-color-amber {
-   background-color: #f59e0b;
- }
+.card-color-amber {
+  background-color: #f59e0b;
+}
 
- .card-color-purple {
-   background-color: #a855f7;
- }
+.card-color-purple {
+  background-color: #a855f7;
+}
 
- .card-color-orange {
-   background-color: #f97316;
- }
+.card-color-orange {
+  background-color: #f97316;
+}
 
- .card-color-indigo {
-   background-color: #6366f1;
- }
+.card-color-indigo {
+  background-color: #6366f1;
+}
 
- .card-color-lime {
-   background-color: #84cc16;
- }
+.card-color-lime {
+  background-color: #84cc16;
+}

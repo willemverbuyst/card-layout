@@ -1,4 +1,3 @@
-import React from "react";
 import useCardStore from "../hooks/useCardStore";
 import { MemoizedCardComponent } from "./card-component";
 import "./card-layout.css";
