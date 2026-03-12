@@ -15,11 +15,7 @@ type CardLayoutData = {
 
 type CardLayoutActions = {
   handleCollapse: (column: ColumnId, index: number) => void;
-  handleMove: (input: {
-    direction: Direction;
-    column: ColumnId;
-    index: number;
-  }) => void;
+  handleMove: (input: { direction: Direction; column: ColumnId; index: number }) => void;
 };
 
 export type CardLayoutState = CardLayoutData & CardLayoutActions;
@@ -39,7 +35,7 @@ const moveWithinColumn = (
   return nextItems;
 };
 
-const cardStore = createStore<CardLayoutState>((set) => ({
+export const cardStore = createStore<CardLayoutState>((set) => ({
   ...initialState,
   handleCollapse: (column, index) =>
     set((state) => {
@@ -138,6 +134,7 @@ const cardStore = createStore<CardLayoutState>((set) => ({
     }),
 }));
 
-const useCardStore = () => useStore(cardStore);
+const useCardStore = <TSelected>(selector: (state: CardLayoutState) => TSelected) =>
+  useStore(cardStore, selector);
 
 export default useCardStore;
