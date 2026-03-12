@@ -7,7 +7,7 @@ export type ColumnId = 1 | 2 | 3;
 
 export type Direction = "up" | "down" | "left" | "right";
 
-export type CardLayout = Record<ColumnId, CardItem[]>;
+type CardLayout = Record<ColumnId, CardItem[]>;
 
 type CardLayoutData = {
   layout: CardLayout;
@@ -18,7 +18,7 @@ type CardLayoutActions = {
   handleMove: (input: { direction: Direction; column: ColumnId; index: number }) => void;
 };
 
-export type CardLayoutState = CardLayoutData & CardLayoutActions;
+type CardLayoutState = CardLayoutData & CardLayoutActions;
 
 const initialState: CardLayoutData = {
   layout: defaultCardLayout,
@@ -35,7 +35,7 @@ const moveWithinColumn = (
   return nextItems;
 };
 
-export const cardStore = createStore<CardLayoutState>((set) => ({
+const cardStore = createStore<CardLayoutState>((set) => ({
   ...initialState,
   handleCollapse: (column, index) =>
     set((state) => {
