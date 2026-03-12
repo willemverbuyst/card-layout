@@ -28,48 +28,113 @@ const initialState: CardLayoutData = {
   layout: defaultCardLayout,
 };
 
+const moveWithinColumn = (
+  columnItems: CardItem[],
+  fromIndex: number,
+  toIndex: number,
+): CardItem[] => {
+  const nextItems = [...columnItems];
+  const [movedItem] = nextItems.splice(fromIndex, 1);
+  nextItems.splice(toIndex, 0, movedItem);
+  return nextItems;
+};
+
 const cardStore = createStore<CardLayoutState>((set) => ({
   ...initialState,
   handleCollapse: (column, index) =>
     set((state) => {
-      const newLayout = { ...state.layout };
-      newLayout[column][index].collapsed = !newLayout[column][index].collapsed;
-      return { layout: newLayout };
+      const columnItems = state.layout[column];
+      const target = columnItems[index];
+      if (!target) {
+        return state;
+      }
+
+      const updatedColumn: CardItem[] = columnItems.map((item, itemIndex) =>
+        itemIndex === index ? { ...item, collapsed: !item.collapsed } : item,
+      );
+
+      return {
+        layout: {
+          ...state.layout,
+          [column]: updatedColumn,
+        },
+      };
     }),
-  handleMove: ({ direction, column, index, cardItem }) =>
+  handleMove: ({ direction, column, index }) =>
     set((state) => {
-      const newLayout = {
-        1: [...state.layout[1]],
-        2: [...state.layout[2]],
-        3: [...state.layout[3]],
+      const currentColumnItems = state.layout[column];
+      const cardItem = currentColumnItems[index];
+
+      if (!cardItem) {
+        return state;
+      }
+
+      let nextLayout: CardLayout = {
+        ...state.layout,
       };
 
       switch (direction) {
-        case "left":
-          if (column === 1) return state;
-          newLayout[(column - 1) as 1 | 2].unshift(cardItem);
-          newLayout[column].splice(index, 1);
+        case "left": {
+          if (column === 1) {
+            return state;
+          }
+
+          const sourceColumnItems = [...state.layout[column]];
+          const [movedItem] = sourceColumnItems.splice(index, 1);
+          const targetColumnId = (column - 1) as ColumnId;
+          const targetColumnItems = [movedItem, ...state.layout[targetColumnId]];
+
+          nextLayout = {
+            ...state.layout,
+            [column]: sourceColumnItems,
+            [targetColumnId]: targetColumnItems,
+          };
           break;
-        case "right":
-          if (column === 3) return state;
-          newLayout[(column + 1) as 2 | 3].unshift(cardItem);
-          newLayout[column].splice(index, 1);
+        }
+        case "right": {
+          if (column === 3) {
+            return state;
+          }
+
+          const sourceColumnItems = [...state.layout[column]];
+          const [movedItem] = sourceColumnItems.splice(index, 1);
+          const targetColumnId = (column + 1) as ColumnId;
+          const targetColumnItems = [movedItem, ...state.layout[targetColumnId]];
+
+          nextLayout = {
+            ...state.layout,
+            [column]: sourceColumnItems,
+            [targetColumnId]: targetColumnItems,
+          };
           break;
-        case "up":
-          if (index === 0) return state;
-          newLayout[column].splice(index, 1);
-          newLayout[column].splice(index - 1, 0, cardItem);
+        }
+        case "up": {
+          if (index === 0) {
+            return state;
+          }
+
+          nextLayout = {
+            ...state.layout,
+            [column]: moveWithinColumn(state.layout[column], index, index - 1),
+          };
           break;
-        case "down":
-          if (index === newLayout[column].length - 1) return state;
-          newLayout[column].splice(index, 1);
-          newLayout[column].splice(index + 1, 0, cardItem);
+        }
+        case "down": {
+          if (index === state.layout[column].length - 1) {
+            return state;
+          }
+
+          nextLayout = {
+            ...state.layout,
+            [column]: moveWithinColumn(state.layout[column], index, index + 1),
+          };
           break;
+        }
         default:
-          break;
+          return state;
       }
 
-      return { layout: newLayout };
+      return { layout: nextLayout };
     }),
 }));
 
