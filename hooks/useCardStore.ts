@@ -1,7 +1,7 @@
-import { defaultCardLayout } from "@/config/defaultCardLayout";
-import { CardItem } from "@/interfaces/CardItem";
 import { useStore } from "zustand";
 import { createStore } from "zustand/vanilla";
+import { defaultCardLayout } from "../config/defaultCardLayout";
+import { CardItem } from "../interfaces/CardItem";
 
 interface CardLayoutState {
   layout: {

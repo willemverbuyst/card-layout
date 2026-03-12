@@ -1,15 +1,15 @@
-import useCardStore from "@/hooks/useCardStore";
-import { CardItem } from "@/interfaces/CardItem";
-import { cn } from "@/lib/utils";
 import {
-  MaximizeIcon,
-  MinimizeIcon,
-  MoveDownIcon,
-  MoveLeftIcon,
-  MoveRightIcon,
-  MoveUpIcon,
+    MaximizeIcon,
+    MinimizeIcon,
+    MoveDownIcon,
+    MoveLeftIcon,
+    MoveRightIcon,
+    MoveUpIcon
 } from "lucide-react";
 import { memo } from "react";
+import useCardStore from "../hooks/useCardStore";
+import { CardItem } from "../interfaces/CardItem";
+import { cn } from "../lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 function CardComponent({
