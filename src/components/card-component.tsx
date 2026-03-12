@@ -10,7 +10,6 @@ import React, { memo } from "react";
 import useCardStore from "../hooks/useCardStore";
 import { CardItem } from "../interfaces/CardItem";
 import { cn } from "../lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 function CardComponent({
   index,
@@ -32,9 +31,8 @@ function CardComponent({
   }
 
   return (
-    <Card className={cn(cardItem.color, "text-white")}>
-      <CardHeader>
-        <CardTitle className="text-3xl flex items-center justify-between">
+    <div className={cn(cardItem.color, "text-white border rounded-lg p-4")}>
+        <div className="text-3xl flex items-center justify-between">
           <span>{cardItem.name}</span>
           <span className="flex gap-2">
             <MoveLeftIcon
@@ -56,10 +54,9 @@ function CardComponent({
               <MinimizeIcon onClick={collapse} />
             )}
           </span>
-        </CardTitle>
-      </CardHeader>
-      {!cardItem.collapsed && <CardContent className="h-[80px]" />}
-    </Card>
+        </div>
+      {!cardItem.collapsed && <div className="h-[80px]" />}
+    </div>
   );
 }
 
