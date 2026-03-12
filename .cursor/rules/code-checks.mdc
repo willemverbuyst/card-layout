@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+# Code checks
+
+Always run the following scripts when you are finished.
+
+- fmt:check
+- lint:check
+- type:check
+
+Fix errors when they are reported.
