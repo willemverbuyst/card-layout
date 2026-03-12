@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "foo",
+    "bar",
+    "baz",
+    "fred",
+    "qux",
+    "quux",
+    "corge",
+    "plugh",
+    "grault",
+    "garply",
+    "waldo",
+    "xyzzy"
+  ]
+}
