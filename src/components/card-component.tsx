@@ -9,7 +9,7 @@ import {
 import React, { memo } from "react";
 import useCardStore from "../hooks/useCardStore";
 import { CardItem } from "../interfaces/CardItem";
-import { cn } from "../lib/utils";
+import "./card-component.css";
 
 function CardComponent({
   index,
@@ -31,21 +31,21 @@ function CardComponent({
   }
 
   return (
-    <div className={cn(cardItem.color, "text-white border rounded-lg p-4")}>
-        <div className="text-3xl flex items-center justify-between">
+    <div className={`${cardItem.color} card`}>
+        <div className="card-header">
           <span>{cardItem.name}</span>
-          <span className="flex gap-2">
+          <span className="card-actions">
             <MoveLeftIcon
-              className="cursor-pointer hidden lg:block"
+              className="card-icon"
               onClick={() => move("left")}
             />
             <MoveDownIcon
-              className="cursor-pointer"
+              className="card-icon"
               onClick={() => move("down")}
             />
-            <MoveUpIcon className="cursor-pointer" onClick={() => move("up")} />
+            <MoveUpIcon className="card-icon" onClick={() => move("up")} />
             <MoveRightIcon
-              className="cursor-pointer hidden lg:block"
+              className="card-icon"
               onClick={() => move("right")}
             />
             {cardItem.collapsed ? (
@@ -55,7 +55,7 @@ function CardComponent({
             )}
           </span>
         </div>
-      {!cardItem.collapsed && <div className="h-[80px]" />}
+      {!cardItem.collapsed && <div className="card-body" />}
     </div>
   );
 }

@@ -1,0 +1,31 @@
+.card-layout-root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .card-layout-root {
+    flex-direction: row;
+    padding: 3rem;
+  }
+
+  .card-layout-column {
+    width: 33.333333%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card-layout-root {
+    padding: 6rem;
+  }
+}
+
+.card-layout-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

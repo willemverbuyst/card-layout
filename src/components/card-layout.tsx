@@ -1,15 +1,16 @@
 import React from "react";
 import useCardStore from "../hooks/useCardStore";
 import { MemoizedCardComponent } from "./card-component";
+import "./card-layout.css";
 
 export default function CardLayout() {
   const { layout } = useCardStore();
 
   return (
-    <main className="flex flex-col justify-center lg:flex-row items-stretch gap-2 p-4 lg:p-12 xl:p-24">
+    <main className="card-layout-root">
       {Object.entries(layout).map(([column, cardItems]) => {
         return (
-          <section className="flex flex-col gap-2 lg:w-1/3" key={column}>
+          <section className="card-layout-column" key={column}>
             {cardItems.map((cardItem, index) => (
               <MemoizedCardComponent
                 key={cardItem.name}
