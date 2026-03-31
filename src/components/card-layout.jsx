@@ -3,6 +3,34 @@ import { createInitialLayout, moveCard, toggleCardCollapse } from "../utils/card
 import { renderCardComponent } from "./card-component.jsx";
 import "./card-layout.css";
 
+export function renderCardLayout(layout) {
+  const columnsMarkup = Object.entries(layout)
+    .map(([column, cardItems]) => {
+      const cardsMarkup = cardItems
+        .map((cardItem, index) =>
+          renderCardComponent({
+            cardItem,
+            index,
+            column: Number(column),
+          }),
+        )
+        .join("");
+
+      return `
+        <section class="card-layout-column">
+          ${cardsMarkup}
+        </section>
+      `;
+    })
+    .join("");
+
+  return `
+    <main class="card-layout-root">
+      ${columnsMarkup}
+    </main>
+  `;
+}
+
 export default function CardLayout() {
   const [layout, setLayout] = useState(() => createInitialLayout());
 
@@ -39,25 +67,9 @@ export default function CardLayout() {
   }
 
   return (
-    <main className="card-layout-root" onClick={handleCardAction}>
-      {Object.entries(layout).map(([column, cardItems]) => {
-        return (
-          <section className="card-layout-column" key={column}>
-            {cardItems.map((cardItem, index) => (
-              <div
-                key={cardItem.name}
-                dangerouslySetInnerHTML={{
-                  __html: renderCardComponent({
-                    cardItem,
-                    index,
-                    column: Number(column),
-                  }),
-                }}
-              />
-            ))}
-          </section>
-        );
-      })}
-    </main>
+    <div
+      onClick={handleCardAction}
+      dangerouslySetInnerHTML={{ __html: renderCardLayout(layout) }}
+    />
   );
 }
