@@ -136,11 +136,6 @@
         }
       }
     </style>
-    <script
-      src="https://code.jquery.com/jquery-4.0.0.slim.js"
-      integrity="sha256-M+GjhMBfXikM1izMplICCTscIj5hzPCp6uDzaypxtgg="
-      crossorigin="anonymous"
-    ></script>
   </head>
   <body>
     <div id="root"></div>
@@ -199,7 +194,9 @@
         return {
           ...layout,
           [column]: columnItems.map((item, itemIndex) =>
-            itemIndex === index ? { ...item, collapsed: !item.collapsed } : item,
+            itemIndex === index
+              ? { ...item, collapsed: !item.collapsed }
+              : item,
           ),
         };
       }
@@ -291,7 +288,9 @@
         const collapseLabel = cardItem.collapsed
           ? `Expand ${cardItem.name}`
           : `Collapse ${cardItem.name}`;
-        const bodyMarkup = cardItem.collapsed ? "" : '<div class="card-body"></div>';
+        const bodyMarkup = cardItem.collapsed
+          ? ""
+          : '<div class="card-body"></div>';
 
         return `
           <div class="${cardItem.color} card">
@@ -344,23 +343,33 @@
         `;
       }
 
-      const root = $("#root");
+      const root = document.querySelector("#root");
       let layout = createInitialLayout();
 
       function render() {
-        root.html(renderCardLayout(layout));
-      }
-
-      function handleCardAction(event) {
-        const actionButton = $(event.target).closest("button[data-action]");
-
-        if (actionButton.length === 0) {
+        if (!root) {
           return;
         }
 
-        const column = Number(actionButton.data("column"));
-        const index = Number(actionButton.data("index"));
-        const action = actionButton.data("action");
+        root.innerHTML = renderCardLayout(layout);
+      }
+
+      function handleCardAction(event) {
+        const target = event.target;
+
+        if (!(target instanceof Element)) {
+          return;
+        }
+
+        const actionButton = target.closest("button[data-action]");
+
+        if (!actionButton) {
+          return;
+        }
+
+        const column = Number(actionButton.dataset.column);
+        const index = Number(actionButton.dataset.index);
+        const action = actionButton.dataset.action;
 
         if (action === "collapse") {
           layout = toggleCardCollapse(layout, column, index);
@@ -368,7 +377,7 @@
           return;
         }
 
-        const direction = actionButton.data("direction");
+        const direction = actionButton.dataset.direction;
 
         if (!direction) {
           return;
@@ -378,7 +387,10 @@
         render();
       }
 
-      root.on("click", "button[data-action]", handleCardAction);
+      if (root) {
+        root.addEventListener("click", handleCardAction);
+      }
+
       render();
     </script>
   </body>
