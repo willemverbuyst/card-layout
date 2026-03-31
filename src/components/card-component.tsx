@@ -1,6 +1,6 @@
 import { memo } from "react";
-import useCardStore, { ColumnId, Direction } from "../hooks/useCardStore";
 import { CardItem } from "../interfaces/CardItem";
+import { ColumnId, Direction } from "../utils/card-layout";
 import "./card-component.css";
 
 const moveButtons: Array<{ direction: Direction; label: string }> = [
@@ -14,20 +14,21 @@ function CardComponent({
   index,
   cardItem,
   column,
+  onCollapse,
+  onMove,
 }: {
   index: number;
   cardItem: CardItem;
   column: ColumnId;
+  onCollapse: (column: ColumnId, index: number) => void;
+  onMove: (direction: Direction, column: ColumnId, index: number) => void;
 }) {
-  const handleCollapse = useCardStore((state) => state.handleCollapse);
-  const handleMove = useCardStore((state) => state.handleMove);
-
   function collapse() {
-    handleCollapse(column, index);
+    onCollapse(column, index);
   }
 
   function move(direction: Direction) {
-    handleMove({ direction, column, index });
+    onMove(direction, column, index);
   }
 
   return (
