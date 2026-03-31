@@ -1,26 +1,13 @@
-import { defaultCardLayout } from "../config/defaultCardLayout";
-import { CardItem } from "../interfaces/CardItem";
+import { defaultCardLayout } from "../config/defaultCardLayout.js";
 
-export type ColumnId = 1 | 2 | 3;
-
-export type Direction = "up" | "down" | "left" | "right";
-
-export type CardLayout = Record<ColumnId, CardItem[]>;
-
-type MoveInput = {
-  direction: Direction;
-  column: ColumnId;
-  index: number;
-};
-
-function moveWithinColumn(columnItems: CardItem[], fromIndex: number, toIndex: number): CardItem[] {
+function moveWithinColumn(columnItems, fromIndex, toIndex) {
   const nextItems = [...columnItems];
   const [movedItem] = nextItems.splice(fromIndex, 1);
   nextItems.splice(toIndex, 0, movedItem);
   return nextItems;
 }
 
-export function createInitialLayout(): CardLayout {
+export function createInitialLayout() {
   return {
     1: [...defaultCardLayout[1]],
     2: [...defaultCardLayout[2]],
@@ -28,11 +15,7 @@ export function createInitialLayout(): CardLayout {
   };
 }
 
-export function toggleCardCollapse(
-  layout: CardLayout,
-  column: ColumnId,
-  index: number,
-): CardLayout {
+export function toggleCardCollapse(layout, column, index) {
   const columnItems = layout[column];
   const target = columnItems[index];
 
@@ -48,7 +31,7 @@ export function toggleCardCollapse(
   };
 }
 
-export function moveCard(layout: CardLayout, input: MoveInput): CardLayout {
+export function moveCard(layout, input) {
   const { direction, column, index } = input;
   const currentColumnItems = layout[column];
   const cardItem = currentColumnItems[index];
@@ -65,7 +48,7 @@ export function moveCard(layout: CardLayout, input: MoveInput): CardLayout {
 
       const sourceColumnItems = [...layout[column]];
       const [movedItem] = sourceColumnItems.splice(index, 1);
-      const targetColumnId = (column - 1) as ColumnId;
+      const targetColumnId = column - 1;
 
       return {
         ...layout,
@@ -80,7 +63,7 @@ export function moveCard(layout: CardLayout, input: MoveInput): CardLayout {
 
       const sourceColumnItems = [...layout[column]];
       const [movedItem] = sourceColumnItems.splice(index, 1);
-      const targetColumnId = (column + 1) as ColumnId;
+      const targetColumnId = column + 1;
 
       return {
         ...layout,

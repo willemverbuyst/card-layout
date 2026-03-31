@@ -1,33 +1,19 @@
 import { memo } from "react";
-import { CardItem } from "../interfaces/CardItem";
-import { ColumnId, Direction } from "../utils/card-layout";
 import "./card-component.css";
 
-const moveButtons: Array<{ direction: Direction; label: string }> = [
+const moveButtons = [
   { direction: "left", label: "L" },
   { direction: "down", label: "D" },
   { direction: "up", label: "U" },
   { direction: "right", label: "R" },
 ];
 
-function CardComponent({
-  index,
-  cardItem,
-  column,
-  onCollapse,
-  onMove,
-}: {
-  index: number;
-  cardItem: CardItem;
-  column: ColumnId;
-  onCollapse: (column: ColumnId, index: number) => void;
-  onMove: (direction: Direction, column: ColumnId, index: number) => void;
-}) {
+function CardComponent({ index, cardItem, column, onCollapse, onMove }) {
   function collapse() {
     onCollapse(column, index);
   }
 
-  function move(direction: Direction) {
+  function move(direction) {
     onMove(direction, column, index);
   }
 

@@ -1,23 +1,16 @@
 import { useState } from "react";
-import {
-  CardLayout as CardLayoutState,
-  ColumnId,
-  Direction,
-  createInitialLayout,
-  moveCard,
-  toggleCardCollapse,
-} from "../utils/card-layout";
-import { MemoizedCardComponent } from "./card-component";
+import { createInitialLayout, moveCard, toggleCardCollapse } from "../utils/card-layout.js";
+import { MemoizedCardComponent } from "./card-component.jsx";
 import "./card-layout.css";
 
 export default function CardLayout() {
-  const [layout, setLayout] = useState<CardLayoutState>(() => createInitialLayout());
+  const [layout, setLayout] = useState(() => createInitialLayout());
 
-  function handleCollapse(column: ColumnId, index: number) {
+  function handleCollapse(column, index) {
     setLayout((currentLayout) => toggleCardCollapse(currentLayout, column, index));
   }
 
-  function handleMove(direction: Direction, column: ColumnId, index: number) {
+  function handleMove(direction, column, index) {
     setLayout((currentLayout) => moveCard(currentLayout, { direction, column, index }));
   }
 
@@ -31,7 +24,7 @@ export default function CardLayout() {
                 key={cardItem.name}
                 cardItem={cardItem}
                 index={index}
-                column={Number(column) as ColumnId}
+                column={Number(column)}
                 onCollapse={handleCollapse}
                 onMove={handleMove}
               />

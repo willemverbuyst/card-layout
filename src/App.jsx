@@ -1,4 +1,4 @@
-import CardLayout from "./components/card-layout";
+import CardLayout from "./components/card-layout.jsx";
 
 function App() {
   return <CardLayout />;
