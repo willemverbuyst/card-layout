@@ -1,15 +1,14 @@
-import {
-  MaximizeIcon,
-  MinimizeIcon,
-  MoveDownIcon,
-  MoveLeftIcon,
-  MoveRightIcon,
-  MoveUpIcon,
-} from "lucide-react";
 import { memo } from "react";
 import useCardStore, { ColumnId, Direction } from "../hooks/useCardStore";
 import { CardItem } from "../interfaces/CardItem";
 import "./card-component.css";
+
+const moveButtons: Array<{ direction: Direction; label: string }> = [
+  { direction: "left", label: "L" },
+  { direction: "down", label: "D" },
+  { direction: "up", label: "U" },
+  { direction: "right", label: "R" },
+];
 
 function CardComponent({
   index,
@@ -36,15 +35,27 @@ function CardComponent({
       <div className="card-header">
         <span>{cardItem.name}</span>
         <span className="card-actions">
-          <MoveLeftIcon className="card-icon" onClick={() => move("left")} />
-          <MoveDownIcon className="card-icon" onClick={() => move("down")} />
-          <MoveUpIcon className="card-icon" onClick={() => move("up")} />
-          <MoveRightIcon className="card-icon" onClick={() => move("right")} />
-          {cardItem.collapsed ? (
-            <MaximizeIcon onClick={collapse} />
-          ) : (
-            <MinimizeIcon onClick={collapse} />
-          )}
+          {moveButtons.map(({ direction, label }) => (
+            <button
+              type="button"
+              className="card-icon-button"
+              key={direction}
+              onClick={() => move(direction)}
+              aria-label={`Move ${cardItem.name} ${direction}`}
+            >
+              <span className="card-icon">{label}</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            className="card-icon-button"
+            onClick={collapse}
+            aria-label={
+              cardItem.collapsed ? `Expand ${cardItem.name}` : `Collapse ${cardItem.name}`
+            }
+          >
+            <span className="card-icon">{cardItem.collapsed ? "+" : "-"}</span>
+          </button>
         </span>
       </div>
       {!cardItem.collapsed && <div className="card-body" />}
