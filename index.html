@@ -5,9 +5,381 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card Layout</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .card {
+        color: #ffffff;
+        border: 0 solid #ffffff;
+        border-radius: 0.5rem;
+        padding: 1rem;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .card-icon-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        padding: 0;
+        color: inherit;
+        background: transparent;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      .card-icon {
+        font-size: 0.875rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+
+      .card-body {
+        height: 80px;
+      }
+
+      .card-color-red {
+        background-color: #ef4444;
+      }
+
+      .card-color-green {
+        background-color: #22c55e;
+      }
+
+      .card-color-blue {
+        background-color: #3b82f6;
+      }
+
+      .card-color-cyan {
+        background-color: #06b6d4;
+      }
+
+      .card-color-pink {
+        background-color: #ec4899;
+      }
+
+      .card-color-teal {
+        background-color: #14b8a6;
+      }
+
+      .card-color-yellow {
+        background-color: #eab308;
+      }
+
+      .card-color-amber {
+        background-color: #f59e0b;
+      }
+
+      .card-color-purple {
+        background-color: #a855f7;
+      }
+
+      .card-color-orange {
+        background-color: #f97316;
+      }
+
+      .card-color-indigo {
+        background-color: #6366f1;
+      }
+
+      .card-color-lime {
+        background-color: #84cc16;
+      }
+
+      .card-layout-root {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+
+      .card-layout-column {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        .card-layout-root {
+          flex-direction: row;
+          padding: 3rem;
+        }
+
+        .card-layout-column {
+          width: 33.333333%;
+        }
+      }
+
+      @media (min-width: 1280px) {
+        .card-layout-root {
+          padding: 6rem;
+        }
+      }
+    </style>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.slim.js"
+      integrity="sha256-M+GjhMBfXikM1izMplICCTscIj5hzPCp6uDzaypxtgg="
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script>
+      const defaultCardLayout = {
+        1: [
+          { name: "foo", color: "card-color-red", collapsed: true },
+          { name: "bar", color: "card-color-green", collapsed: true },
+          { name: "baz", color: "card-color-blue", collapsed: true },
+          { name: "fred", color: "card-color-cyan", collapsed: true },
+        ],
+        2: [
+          { name: "qux", color: "card-color-pink", collapsed: false },
+          { name: "quux", color: "card-color-teal", collapsed: false },
+          { name: "corge", color: "card-color-yellow", collapsed: false },
+          { name: "plugh", color: "card-color-amber", collapsed: false },
+        ],
+        3: [
+          { name: "grault", color: "card-color-purple", collapsed: false },
+          { name: "garply", color: "card-color-orange", collapsed: false },
+          { name: "waldo", color: "card-color-indigo", collapsed: false },
+          { name: "xyzzy", color: "card-color-lime", collapsed: false },
+        ],
+      };
+
+      const moveButtons = [
+        { direction: "left", label: "L" },
+        { direction: "down", label: "D" },
+        { direction: "up", label: "U" },
+        { direction: "right", label: "R" },
+      ];
+
+      function moveWithinColumn(columnItems, fromIndex, toIndex) {
+        const nextItems = [...columnItems];
+        const [movedItem] = nextItems.splice(fromIndex, 1);
+        nextItems.splice(toIndex, 0, movedItem);
+        return nextItems;
+      }
+
+      function createInitialLayout() {
+        return {
+          1: [...defaultCardLayout[1]],
+          2: [...defaultCardLayout[2]],
+          3: [...defaultCardLayout[3]],
+        };
+      }
+
+      function toggleCardCollapse(layout, column, index) {
+        const columnItems = layout[column];
+        const target = columnItems[index];
+
+        if (!target) {
+          return layout;
+        }
+
+        return {
+          ...layout,
+          [column]: columnItems.map((item, itemIndex) =>
+            itemIndex === index ? { ...item, collapsed: !item.collapsed } : item,
+          ),
+        };
+      }
+
+      function moveCard(layout, input) {
+        const { direction, column, index } = input;
+        const currentColumnItems = layout[column];
+        const cardItem = currentColumnItems[index];
+
+        if (!cardItem) {
+          return layout;
+        }
+
+        switch (direction) {
+          case "left": {
+            if (column === 1) {
+              return layout;
+            }
+
+            const sourceColumnItems = [...layout[column]];
+            const [movedItem] = sourceColumnItems.splice(index, 1);
+            const targetColumnId = column - 1;
+
+            return {
+              ...layout,
+              [column]: sourceColumnItems,
+              [targetColumnId]: [movedItem, ...layout[targetColumnId]],
+            };
+          }
+          case "right": {
+            if (column === 3) {
+              return layout;
+            }
+
+            const sourceColumnItems = [...layout[column]];
+            const [movedItem] = sourceColumnItems.splice(index, 1);
+            const targetColumnId = column + 1;
+
+            return {
+              ...layout,
+              [column]: sourceColumnItems,
+              [targetColumnId]: [movedItem, ...layout[targetColumnId]],
+            };
+          }
+          case "up": {
+            if (index === 0) {
+              return layout;
+            }
+
+            return {
+              ...layout,
+              [column]: moveWithinColumn(layout[column], index, index - 1),
+            };
+          }
+          case "down": {
+            if (index === layout[column].length - 1) {
+              return layout;
+            }
+
+            return {
+              ...layout,
+              [column]: moveWithinColumn(layout[column], index, index + 1),
+            };
+          }
+          default:
+            return layout;
+        }
+      }
+
+      function renderCardComponent({ index, cardItem, column }) {
+        const moveButtonsMarkup = moveButtons
+          .map(({ direction, label }) => {
+            return `
+              <button
+                type="button"
+                class="card-icon-button"
+                data-action="move"
+                data-direction="${direction}"
+                data-column="${column}"
+                data-index="${index}"
+                aria-label="Move ${cardItem.name} ${direction}"
+              >
+                <span class="card-icon">${label}</span>
+              </button>
+            `;
+          })
+          .join("");
+
+        const collapseLabel = cardItem.collapsed
+          ? `Expand ${cardItem.name}`
+          : `Collapse ${cardItem.name}`;
+        const bodyMarkup = cardItem.collapsed ? "" : '<div class="card-body"></div>';
+
+        return `
+          <div class="${cardItem.color} card">
+            <div class="card-header">
+              <span>${cardItem.name}</span>
+              <span class="card-actions">
+                ${moveButtonsMarkup}
+                <button
+                  type="button"
+                  class="card-icon-button"
+                  data-action="collapse"
+                  data-column="${column}"
+                  data-index="${index}"
+                  aria-label="${collapseLabel}"
+                >
+                  <span class="card-icon">${cardItem.collapsed ? "+" : "-"}</span>
+                </button>
+              </span>
+            </div>
+            ${bodyMarkup}
+          </div>
+        `;
+      }
+
+      function renderCardLayout(layout) {
+        const columnsMarkup = Object.entries(layout)
+          .map(([column, cardItems]) => {
+            const cardsMarkup = cardItems
+              .map((cardItem, index) =>
+                renderCardComponent({
+                  cardItem,
+                  index,
+                  column: Number(column),
+                }),
+              )
+              .join("");
+
+            return `
+              <section class="card-layout-column">
+                ${cardsMarkup}
+              </section>
+            `;
+          })
+          .join("");
+
+        return `
+          <main class="card-layout-root">
+            ${columnsMarkup}
+          </main>
+        `;
+      }
+
+      const root = $("#root");
+      let layout = createInitialLayout();
+
+      function render() {
+        root.html(renderCardLayout(layout));
+      }
+
+      function handleCardAction(event) {
+        const actionButton = $(event.target).closest("button[data-action]");
+
+        if (actionButton.length === 0) {
+          return;
+        }
+
+        const column = Number(actionButton.data("column"));
+        const index = Number(actionButton.data("index"));
+        const action = actionButton.data("action");
+
+        if (action === "collapse") {
+          layout = toggleCardCollapse(layout, column, index);
+          render();
+          return;
+        }
+
+        const direction = actionButton.data("direction");
+
+        if (!direction) {
+          return;
+        }
+
+        layout = moveCard(layout, { direction, column, index });
+        render();
+      }
+
+      root.on("click", "button[data-action]", handleCardAction);
+      render();
+    </script>
   </body>
 </html>
