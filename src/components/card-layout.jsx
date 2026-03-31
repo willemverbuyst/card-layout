@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createInitialLayout, moveCard, toggleCardCollapse } from "../utils/card-layout.js";
-import { MemoizedCardComponent } from "./card-component.jsx";
+import { renderCardComponent } from "./card-component.jsx";
 import "./card-layout.css";
 
 export default function CardLayout() {
@@ -14,19 +14,45 @@ export default function CardLayout() {
     setLayout((currentLayout) => moveCard(currentLayout, { direction, column, index }));
   }
 
+  function handleCardAction(event) {
+    const actionButton = event.target.closest("button[data-action]");
+
+    if (!actionButton) {
+      return;
+    }
+
+    const column = Number(actionButton.dataset.column);
+    const index = Number(actionButton.dataset.index);
+
+    if (actionButton.dataset.action === "collapse") {
+      handleCollapse(column, index);
+      return;
+    }
+
+    const { direction } = actionButton.dataset;
+
+    if (!direction) {
+      return;
+    }
+
+    handleMove(direction, column, index);
+  }
+
   return (
-    <main className="card-layout-root">
+    <main className="card-layout-root" onClick={handleCardAction}>
       {Object.entries(layout).map(([column, cardItems]) => {
         return (
           <section className="card-layout-column" key={column}>
             {cardItems.map((cardItem, index) => (
-              <MemoizedCardComponent
+              <div
                 key={cardItem.name}
-                cardItem={cardItem}
-                index={index}
-                column={Number(column)}
-                onCollapse={handleCollapse}
-                onMove={handleMove}
+                dangerouslySetInnerHTML={{
+                  __html: renderCardComponent({
+                    cardItem,
+                    index,
+                    column: Number(column),
+                  }),
+                }}
               />
             ))}
           </section>

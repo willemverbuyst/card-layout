@@ -1,4 +1,3 @@
-import { memo } from "react";
 import "./card-component.css";
 
 const moveButtons = [
@@ -8,46 +7,49 @@ const moveButtons = [
   { direction: "right", label: "R" },
 ];
 
-function CardComponent({ index, cardItem, column, onCollapse, onMove }) {
-  function collapse() {
-    onCollapse(column, index);
-  }
+export function renderCardComponent({ index, cardItem, column }) {
+  const moveButtonsMarkup = moveButtons
+    .map(({ direction, label }) => {
+      return `
+        <button
+          type="button"
+          class="card-icon-button"
+          data-action="move"
+          data-direction="${direction}"
+          data-column="${column}"
+          data-index="${index}"
+          aria-label="Move ${cardItem.name} ${direction}"
+        >
+          <span class="card-icon">${label}</span>
+        </button>
+      `;
+    })
+    .join("");
 
-  function move(direction) {
-    onMove(direction, column, index);
-  }
+  const collapseLabel = cardItem.collapsed
+    ? `Expand ${cardItem.name}`
+    : `Collapse ${cardItem.name}`;
+  const bodyMarkup = cardItem.collapsed ? "" : '<div class="card-body"></div>';
 
-  return (
-    <div className={`${cardItem.color} card`}>
-      <div className="card-header">
-        <span>{cardItem.name}</span>
-        <span className="card-actions">
-          {moveButtons.map(({ direction, label }) => (
-            <button
-              type="button"
-              className="card-icon-button"
-              key={direction}
-              onClick={() => move(direction)}
-              aria-label={`Move ${cardItem.name} ${direction}`}
-            >
-              <span className="card-icon">{label}</span>
-            </button>
-          ))}
+  return `
+    <div class="${cardItem.color} card">
+      <div class="card-header">
+        <span>${cardItem.name}</span>
+        <span class="card-actions">
+          ${moveButtonsMarkup}
           <button
             type="button"
-            className="card-icon-button"
-            onClick={collapse}
-            aria-label={
-              cardItem.collapsed ? `Expand ${cardItem.name}` : `Collapse ${cardItem.name}`
-            }
+            class="card-icon-button"
+            data-action="collapse"
+            data-column="${column}"
+            data-index="${index}"
+            aria-label="${collapseLabel}"
           >
-            <span className="card-icon">{cardItem.collapsed ? "+" : "-"}</span>
+            <span class="card-icon">${cardItem.collapsed ? "+" : "-"}</span>
           </button>
         </span>
       </div>
-      {!cardItem.collapsed && <div className="card-body" />}
+      ${bodyMarkup}
     </div>
-  );
+  `;
 }
-
-export const MemoizedCardComponent = memo(CardComponent);
